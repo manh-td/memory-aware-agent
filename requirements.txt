@@ -10,6 +10,7 @@ arxiv
 langchain-huggingface
 sentence-transformers
 langchain
+langgraph
 tavily-python
 pydantic
 openai
