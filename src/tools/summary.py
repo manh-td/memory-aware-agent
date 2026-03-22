@@ -1,7 +1,11 @@
 """Summary tools and context window management."""
 
 import uuid
+from openai import OpenAI
+
+from src.managers.MemoryManager import MemoryManager
 from src.config import MODEL_NAME, MODEL_TOKEN_LIMITS
+from src.tools.toolbox import Toolbox
 
 
 # ====================  CONTEXT WINDOW MANAGEMENT ====================
@@ -169,7 +173,7 @@ Summary:
     return {"id": summary_id, "description": description, "summary": summary}
 
 
-def offload_to_summary(context: str, memory_manager, llm_client, thread_id: str | None = None) -> tuple[
+def offload_to_summary(context: str, memory_manager: MemoryManager, llm_client: OpenAI, thread_id: str | None = None) -> tuple[
     str, list[dict]]:
     """
     Simple context compaction:
@@ -237,7 +241,7 @@ def offload_to_summary(context: str, memory_manager, llm_client, thread_id: str 
     return compact_context, [result]
 
 
-def summarize_conversation(thread_id: str, memory_manager, llm_client) -> dict:
+def summarize_conversation(thread_id: str, memory_manager: MemoryManager, llm_client: OpenAI) -> dict:
     """
     Summarize all unsummarized messages in a thread and mark them.
 
@@ -296,7 +300,7 @@ def summarize_conversation(thread_id: str, memory_manager, llm_client) -> dict:
 
 # ====================  SUMMARY TOOLS ====================
 
-def register_summary_tools(toolbox, memory_manager, llm_client):
+def register_summary_tools(toolbox: Toolbox, memory_manager: MemoryManager, llm_client: OpenAI):
     """
     Register summary-related tools with the toolbox.
 

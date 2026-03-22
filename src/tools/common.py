@@ -4,30 +4,28 @@ import json as json_lib
 from datetime import datetime, timezone
 
 from src.config import MODEL_NAME
-
+from src.tools.toolbox import Toolbox
+from src.managers.MemoryManager import MemoryManager
 
 # ====================  COMMON TOOLS ====================
 
 def register_common_tools(
-        toolbox,
-        memory_manager,
+        toolbox: Toolbox,
+        memory_manager: MemoryManager,
         knowledge_base_table: str = "SEMANTIC_MEMORY",
-        include_summary_tools: bool = True,
 ):
     """
-    Register common tools that should be available across all lessons.
+    Register common tools that should be available across all sessons.
 
     This function creates and registers tools for:
     - ArXiv paper search
     - ArXiv paper fetch and save to knowledge base
     - Get current time
-    - Conversation summarization and summary expansion (optional)
 
     Args:
         toolbox: The Toolbox instance to register tools with
         memory_manager: The MemoryManager instance for storing data
         knowledge_base_table: Name of the knowledge base table
-        include_summary_tools: If True, also registers summary tools
 
     Returns:
         dict: Dictionary of registered tool names to their functions
@@ -171,16 +169,6 @@ def register_common_tools(
         "fetch_and_save_paper_to_kb_db": fetch_and_save_paper_to_kb_db,
         "get_current_time": get_current_time,
     }
-
-    # Optionally include summary tools in the common toolset
-    if include_summary_tools:
-        from .summary import register_summary_tools
-        summary_tools = register_summary_tools(
-            toolbox=toolbox,
-            memory_manager=memory_manager,
-            llm_client=toolbox.llm_client,
-        )
-        registered_tools.update(summary_tools)
 
     print(f"✅ Registered {len(registered_tools)} common tools: {list(registered_tools.keys())}")
 
